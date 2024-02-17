@@ -28,13 +28,13 @@ while true do
       if(direction == "l" or direction == "r" or direction == "u" or direction == "d") then
         board:PlayerMove(x, y, direction)
       else
-        print("Неверное направление движения. Используй l, r, u, d")
+        print("Wrong direction. Use l, r, u, d")
       end
     else
-      print("Неверная комманда, используй m для хода")
+      print("Wrong command. Use m y x d for move or q for quit")
     end
   else
-    print("Неверный ввод. Используй комманду типа m 1 4 l")
+    print("Wrong command. Example: m 1 4 l")
   end
   
 end

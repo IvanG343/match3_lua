@@ -56,7 +56,7 @@ function Board:Tick()
   --Пока true будем выполнять смещение
   while(self:CheckMatchesOnField()) do
     --Дебаг, здесь смотрим где и что образуется и как смещается
-    print("Debug. Промежуточный результат: ")
+    print("Debug. Step into: ")
     self:Dump()
     --Смещаем кристаллы вниз
     self:ShiftDown()
@@ -66,14 +66,14 @@ function Board:Tick()
   --Перемешиваем поле пока не найдём возможность походить
   local reRollCount = 0
   while(self:MovesAvailable() == false) do
-    print("На поле нет возможных ходов")
+    print("No moves available, rerolling the field")
     self:Mix(self.grid)
     reRollCount = reRollCount + 1
   end
   
   --Дебаг
   if(reRollCount > 0) then
-    print("Поле было перемешано "..reRollCount.." раз")
+    print("Rerolled "..reRollCount.." times")
   end
 
 end
@@ -240,7 +240,7 @@ function Board:PlayerMove(y, x, direction)
 
   --Проверяем, что координаты находятся в пределах поля
   if (x < 1 or x > self.width or y < 1 or y > self.height) then
-    print("Координаты выходят за рамки поля")
+    print("Coords out of range")
     return false
   end
   
@@ -249,7 +249,7 @@ function Board:PlayerMove(y, x, direction)
   
   --Если после хода кристалл на новой позиции не образует комбинацию, выполняем ход повторно тем самым вернув оба кристалла в изначальные позиции
   if(self:CheckMatchesOnField() == false) then
-    print("Нет комбинации, ход отменен")
+    print("No combo, move canceled")
     self:MoveCrystal(y, x, direction)
   end
   
@@ -261,19 +261,19 @@ function Board:MoveCrystal(y, x, direction)
 
 --Двигаем кристалл
   if(direction == "l" and x > 1) then
-    print("Двигаем кристалл "..self.grid[y][x].. " c позиции "..y.."-"..x.." на позицию "..y.. "-"..(x-1).." вместо "..self.grid[y][x-1])
+    print("Move crystal "..self.grid[y][x].. " from "..y.."-"..x.." to "..y.. "-"..(x-1).." except "..self.grid[y][x-1])
     self.grid[y][x-1], self.grid[y][x] = self.grid[y][x], self.grid[y][x-1]
   elseif(direction == "r" and x < self.width) then
-    print("Двигаем кристалл "..self.grid[y][x].. " c позиции "..y.."-"..x.." на позицию "..y.. "-"..(x+1).." вместо "..self.grid[y][x+1])
+    print("Move crystal "..self.grid[y][x].. " from "..y.."-"..x.." to "..y.. "-"..(x+1).." except "..self.grid[y][x+1])
     self.grid[y][x+1], self.grid[y][x] = self.grid[y][x], self.grid[y][x+1]
   elseif(direction == "u" and y > 1) then
-    print("Двигаем кристалл "..self.grid[y][x].. " c позиции "..y.."-"..x.." на позицию "..(y-1).. "-"..x.." вместо "..self.grid[y-1][x])
+    print("Move crystal "..self.grid[y][x].. " from "..y.."-"..x.." to "..(y-1).. "-"..x.." except "..self.grid[y-1][x])
     self.grid[y-1][x], self.grid[y][x] = self.grid[y][x], self.grid[y-1][x]
   elseif(direction == "d" and y < self.height) then
-    print("Двигаем кристалл "..self.grid[y][x].. " c позиции "..y.."-"..x.." на позицию "..(y+1).. "-"..x.." вместо "..self.grid[y+1][x])
+    print("Move crystal "..self.grid[y][x].. " from "..y.."-"..x.." to "..(y+1).. "-"..x.." except "..self.grid[y+1][x])
     self.grid[y+1][x], self.grid[y][x] = self.grid[y][x], self.grid[y+1][x]
   else 
-    print("Невозможно сдвинуть в заданном направлении")
+    print("Move is not allowed")
   end
   
 end
