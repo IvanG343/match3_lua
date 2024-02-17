@@ -64,16 +64,17 @@ function Board:Tick()
   
   --Проверка на наличие ходов на поле
   --Перемешиваем поле пока не найдём возможность походить
-  local reRollCount = 0
+  local mixCount = 0
   while(self:MovesAvailable() == false) do
-    print("No moves available, rerolling the field")
+    print("No moves available, mixing the field")
     self:Mix(self.grid)
-    reRollCount = reRollCount + 1
+    self:Tick() --Используем рекурсию вызывая метод из себя же, чтобы после рерола заново проверить всё поле на наличие готовых комбинаций и далее по кругу
+    mixCount = mixCount + 1
   end
   
   --Дебаг
-  if(reRollCount > 0) then
-    print("Rerolled "..reRollCount.." times")
+  if(mixCount > 0) then
+    print("Mixed "..mixCount.." times")
   end
 
 end
